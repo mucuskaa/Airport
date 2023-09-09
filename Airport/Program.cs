@@ -1,55 +1,29 @@
-﻿namespace Airport
+﻿namespace AirportProject
 {
     internal class Program
     {
         static void Main()
         {
-            Console.WriteLine("---AIRPORT---");
+            List<Flight> flights = new List<Flight>
+               {
+                 new Flight(DateTime.Parse("2023-09-10 08:00"), DateTime.Parse("2023-09-10 10:00"), "A", DayOfWeek.Monday, City.NewYork, City.London, "Airline1"),
+                 new Flight(DateTime.Parse("2023-09-11 09:30"), DateTime.Parse("2023-09-11 11:30"), "B", DayOfWeek.Tuesday, City.Paris, City.Berlin, "Airline2"),
+                 new Flight(DateTime.Parse("2023-09-12 12:00"), DateTime.Parse("2023-09-12 14:00"), "C", DayOfWeek.Wednesday, City.Rome, City.Barcelona, "Airline3"),
+                 new Flight(DateTime.Parse("2023-09-13 14:30"), DateTime.Parse("2023-09-13 16:30"), "D", DayOfWeek.Thursday, City.Amsterdam, City.Berlin, "Airline4"),
+                 new Flight(DateTime.Parse("2023-09-14 10:00"), DateTime.Parse("2023-09-14 12:00"), "E", DayOfWeek.Friday, City.London, City.Paris, "Airline5"),
+                 new Flight(DateTime.Parse("2023-09-15 15:30"), DateTime.Parse("2023-09-15 17:30"), "F", DayOfWeek.Saturday, City.Prague, City.Vienna, "Airline6")
+             };
 
+            Airport airport = new Airport("My Airport", flights);
 
-            Console.WriteLine("Enter count of flights");
-            int countOfPlanes;
-            while (!int.TryParse(Console.ReadLine(), out countOfPlanes))
+            // Отримання та виведення рейсів на сьогодні
+            Console.WriteLine("Рейси на сьогодні:");
+            var todayFlights = airport.GetFlightsForToday();
+            foreach (var flight in todayFlights)
             {
-                Console.WriteLine("Incorrect input");
+                Console.WriteLine(flight);
             }
-            Plane[] planes = new Plane[countOfPlanes];
-
-            for (int i = 0; i < planes.Length; i++)
-            {
-                int flightNumber;
-                Console.WriteLine($"Enter destination of {i + 1} flight");
-                string destination = Console.ReadLine();
-
-                Console.WriteLine($"Enter number of {i + 1} flight");
-                while(!int.TryParse(Console.ReadLine(), out flightNumber))
-                {
-                    Console.WriteLine("Incorrect input");
-                }
-
-                Console.WriteLine($"Enter type of {i + 1} plane");
-                string typeOfPlane = Console.ReadLine();
-
-                planes[i] = new Plane(destination, flightNumber, typeOfPlane);
-            }
-
-            Airports airport = new Airports(planes);
-            Console.WriteLine("Enter destination to search:");
-            string searchDestination = Console.ReadLine();
-            Plane foundPlane = airport.FindByDestination(searchDestination);
-
-            if (foundPlane != null)
-            {
-                Console.WriteLine("Found plane:");
-                Console.WriteLine($"Destination: {foundPlane.Destination}");
-                Console.WriteLine($"Flight Number: {foundPlane.FlightNumber}");
-                Console.WriteLine($"Type of Plane: {foundPlane.TypeOfPlane}");
-            }
-            else
-            {
-                Console.WriteLine("No plane found with the specified destination.");
-            }
-
         }
+
     }
 }
