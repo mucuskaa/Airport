@@ -42,7 +42,7 @@ namespace AirportProject
             {
                 string tableHeader = string.Format("| {0,-10} | {1,-10} | {2,-20} | {3,-20} | {4,-8:HH:mm} | {5,-8} |", "Day", "Departure", "Departure city", "Destination", "Arrival", "Terminal");
                 string headerSeparator = new string('-', tableHeader.Length);
-                string table = $"{tableHeader}\n{headerSeparator}\n{flightInfo}";
+                string table = $"{headerSeparator}\n{flightInfo}";
                 isTableHeaderPrinted = true;
                 return table;
             }

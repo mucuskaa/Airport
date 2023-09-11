@@ -22,15 +22,17 @@ namespace AirportProject
                  new Flight(DateTime.Parse("2023-09-13 09:00"), DateTime.Parse("2023-09-21 11:00"), "C", DayOfWeek.Friday, City.Warsaw, City.Budapest, "Airline12"),
                  new Flight(DateTime.Parse("2023-09-22 11:45"), DateTime.Parse("2023-09-22 13:45"), "A", DayOfWeek.Saturday, City.Berlin, City.Amsterdam, "Airline13"),
                  new Flight(DateTime.Parse("2023-09-10 12:30"), DateTime.Parse("2023-09-23 14:30"), "B", DayOfWeek.Sunday, City.Paris, City.London, "Airline14")
-
              };
 
             Airport airport = new Airport("My Airport", flights);
+            string tableHeader = string.Format("| {0,-10} | {1,-10} | {2,-20} | {3,-20} | {4,-8:HH:mm} | {5,-8} |", "Day", "Departure", "Departure city", "Destination", "Arrival", "Terminal");
 
         MainMenu:
             Console.WriteLine($"{new string('-', 10)}{airport.Name}{new string('-', 10)}\n");
 
             Console.WriteLine("Flights for today");
+            Console.WriteLine($"{tableHeader}");
+
             var todayFlights = airport.GetFlightsForToday();
             foreach (var flight in todayFlights)
             {
@@ -59,7 +61,6 @@ namespace AirportProject
                     Console.WriteLine("Wrong input");
                 }
 
-
                 switch (option)
                 {
                     case 1:
@@ -87,6 +88,7 @@ namespace AirportProject
                         }
                         else {
                             Console.WriteLine("Table: ");
+                            Console.WriteLine($"{tableHeader}");
                             
                             foreach (var flight in flightsForDateAndCity)
                             {
@@ -111,6 +113,8 @@ namespace AirportProject
                         else
                         {
                             Console.WriteLine("Table: ");
+                            Console.WriteLine($"{tableHeader}");
+
                             foreach (var flight in flightsForDate)
                             {
                                 Console.WriteLine(flight);
@@ -137,6 +141,8 @@ namespace AirportProject
                         else
                         {
                             Console.WriteLine("Table: ");
+                            Console.WriteLine($"{tableHeader}");
+
                             foreach (var flight in flightsForCity)
                             {
                                 Console.WriteLine(flight);
@@ -159,6 +165,8 @@ namespace AirportProject
                         else
                         {
                             Console.WriteLine("Table: ");
+                            Console.WriteLine($"{tableHeader}");
+
                             foreach (var flight in flightsForAerivalDate)
                             {
                                 Console.WriteLine(flight);
@@ -181,6 +189,8 @@ namespace AirportProject
                         else
                         {
                             Console.WriteLine("Table: ");
+                            Console.WriteLine($"{tableHeader}");
+
                             foreach (var flight in flightsForDepartureDateTime)
                             {
                                 Console.WriteLine(flight);
@@ -188,9 +198,11 @@ namespace AirportProject
                         }
                         break;
                     case 6:
+                        Console.Clear();
                         goto MainMenu;
                         break;
                     case 7:
+                        Console.WriteLine("----------Good bye----------");
                         temp = true;
                         break;
                 }

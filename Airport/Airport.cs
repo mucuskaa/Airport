@@ -35,7 +35,6 @@ namespace AirportProject
             return flightsForDate;
         }
 
-
         //місто прибуття
         public List<Flight> SearchByArrivalCity(City arrivalCity)
         {
@@ -43,7 +42,6 @@ namespace AirportProject
 
             return flightsByArrivalCity;
         }
-
 
         // дата відправки і місто прибуття
 
@@ -72,8 +70,5 @@ namespace AirportProject
 
             return flightsForDateTimeRange;
         }
-
-
-
     }
 }
