@@ -8,28 +8,32 @@ namespace AirportProject
         {
             List<Flight> flights = GetFlightsFromDB();
 
-            DisplayInfo display = new DisplayInfo();
             Validation validation = new Validation();
             DateTime date;
-            City arrivalCity;
+            City userCity;
             string userInput;
-            int option;
+            int option, secondOption;
             bool temp = false;
 
-            Airport airport = new Airport("My Airport", flights);
+            Airport airport = new Airport("SkyHarbor Airport", flights);
 
         MainMenu:
             Console.WriteLine($"{new string('-', 10)}{airport.Name}{new string('-', 10)}\n");
 
             Console.WriteLine("Flights for today\n");
-            var todayFlights = airport.GetFlightsForToday();
-            display.DisplayTable(todayFlights);
 
-            
+
 
             while (!temp)
             {
-                display.DisplayMenu();
+                Console.WriteLine("\nChoose option: ");
+                Console.WriteLine("1-Today’s arrivals");
+                Console.WriteLine("2-Today's departures");
+                Console.WriteLine("3-Search flight by arrival city");
+                Console.WriteLine("4-Search flight by departure city");
+                Console.WriteLine("5-beck to main menu");
+                Console.WriteLine("6-Quit program");
+
 
                 while (!Int32.TryParse(Console.ReadLine(), out option))
                 {
@@ -39,66 +43,111 @@ namespace AirportProject
                 switch (option)
                 {
                     case 1:
-                        Console.Clear();
-                        Console.Write("Enter arrival city: ");
-                        userInput = Console.ReadLine();
-                        arrivalCity = validation.ValidateCity(userInput);
+                        {
+                            Console.Clear();
 
-                        Console.Write("Enter date of departure(yyyy-MM-dd) : ");
-                        userInput = Console.ReadLine();
-                        date = validation.ValidateDate(userInput);
-
-                        var flightsForDateAndCity = airport.SearchByArrivalCityAndDate(arrivalCity, date);
-                        display.DisplayTable(flightsForDateAndCity);
-                        break;
+                            var todayArrivals = airport.GetArrivingFlightsForToday(City.Kyiv);
+                            DisplayInfo.DisplayDepartureTable(todayArrivals);
+                            break;
+                        }
                     case 2:
-                        Console.Clear();
-                        Console.Write("Enter date of departure(yyyy-MM-dd) : ");
-                        userInput = Console.ReadLine();
-                        date = validation.ValidateDate(userInput);
+                        {
+                            Console.Clear();
 
-                        var flightsForDate = airport.SearchByDate(date);
-                        display.DisplayTable(flightsForDate);
-                        break;
+                            var todaydepartures = airport.GetDepartingFlightsForToday(DateTime.Now);
+                            DisplayInfo.DisplayArrivalTable(todaydepartures);
+                            break;
+                        }
                     case 3:
-                        Console.Clear();
-                        Console.Write("Enter arrival city: ");
-                        userInput = Console.ReadLine();
-                        arrivalCity = validation.ValidateCity(userInput);
+                        {
+                            Console.WriteLine("1-Search by destination and departure date");
+                            Console.WriteLine("2-Search by flight number and departure date");
+                            while (!Int32.TryParse(Console.ReadLine(), out secondOption))
+                            {
+                                Console.WriteLine("Wrong input");
+                            }
+                            switch (secondOption)
+                            {
+                                case 1:
+                                    {
+                                        Console.Clear();
+                                        Console.Write("Enter arrival city: ");
+                                        userInput = Console.ReadLine();
+                                        userCity = validation.ValidateCity(userInput);
 
-                        var flightsForCity = airport.SearchByArrivalCity(arrivalCity);
-                        display.DisplayTable(flightsForCity);
-                        break;
+                                        Console.Write("Enter departure date (yyyy-MM-dd) : ");
+                                        userInput = Console.ReadLine();
+                                        date = validation.ValidateDate(userInput);
+
+                                        var flightsByDestinationAndDate=airport.SearchByArrivalCityAndDate(userCity, date);
+                                        DisplayInfo.DisplayDepartureTable(flightsByDestinationAndDate);
+                                        break;
+                                    }
+                                case 2:
+                                    {
+                                        Console.Clear();
+                                        Console.Write("Enter flight number: ");
+                                        string numberInput = Console.ReadLine();
+
+                                        Console.Write("Enter departure date (yyyy-MM-dd) : ");
+                                        userInput = Console.ReadLine();
+                                        date = validation.ValidateDate(userInput);
+
+                                        var flightsByNumberAndDate=airport.SearchByFlightNumberAndDate(numberInput, date);
+                                        DisplayInfo.DisplayDepartureTable(flightsByNumberAndDate);
+                                        break;
+                                    }
+                            }
+
+                            break;
+                        }
                     case 4:
-                        Console.Clear();
-                        Console.Write("Enter arrival date (yyyy-MM-dd) : ");
-                        userInput = Console.ReadLine();
-                        date = validation.ValidateDate(userInput);
+                        {
+                            Console.WriteLine("1-Search by departure city and departure date");
+                            Console.WriteLine("2-Search by flight number and departure date");
+                            while (!Int32.TryParse(Console.ReadLine(), out secondOption))
+                            {
+                                Console.WriteLine("Wrong input");
+                            }
+                            switch (secondOption)
+                            {
+                                case 1:
+                                    {
+                                        Console.Clear();
+                                        Console.Write("Enter departure city: ");
+                                        userInput = Console.ReadLine();
+                                        userCity = validation.ValidateCity(userInput);
 
-                        var flightsForArrivalDate = airport.SearchByArrivalDate(date);
-                        display.DisplayTable(flightsForArrivalDate);
-                        break;
+                                        Console.Write("Enter departure date (yyyy-MM-dd) : ");
+                                        userInput = Console.ReadLine();
+                                        date = validation.ValidateDate(userInput);
+
+                                        var flightsByDestinationAndDate = airport.SearchByDepartureCityAndDate(userCity, date);
+                                        DisplayInfo.DisplayDepartureTable(flightsByDestinationAndDate);
+                                        break;
+                                    }
+                                case 2:
+                                    {
+                                        Console.Clear();
+                                        Console.Write("Enter flight number: ");
+                                        string numberInput = Console.ReadLine();
+
+                                        Console.Write("Enter departure date (yyyy-MM-dd) : ");
+                                        userInput = Console.ReadLine();
+                                        date = validation.ValidateDate(userInput);
+
+                                        var flightsByNumberAndDate = airport.SearchByFlightNumberAndDate(numberInput, date);
+                                        DisplayInfo.DisplayArrivalTable(flightsByNumberAndDate);
+                                        break;
+                                    }
+                            }
+                            break;
+                        }
                     case 5:
-                        Console.Clear();
-                        Console.Write("Enter arrival date (yyyy-MM-dd hh:mm) : ");
-                        userInput = Console.ReadLine();
-                        date = validation.ValidateDate(userInput);
-
-                        var flightsForDepartureDateTime = airport.SearchByDepartureDateTime(date);
-                        display.DisplayTable(flightsForDepartureDateTime);
-                        break;
-                    case 6:
-                        Console.Write("Enter flight number : ");
-                        userInput = Console.ReadLine();
-
-                        var flightsForNumber = airport.SearchByFlightNumber(userInput);
-                        display.DisplayTable(flightsForNumber);
-                        break;
-                    case 7:
                         Console.Clear();
                         goto MainMenu;
                         break;
-                    case 8:
+                    case 6:
                         Console.WriteLine("----------Good bye----------");
                         temp = true;
                         break;
@@ -109,25 +158,33 @@ namespace AirportProject
             static List<Flight> GetFlightsFromDB()
             {
                 return new List<Flight>
-               {
-                 new Flight(DateTime.Now.AddHours(-2).AddMinutes(-19), DateTime.Now.AddHours(4).AddMinutes(19), "A", City.NewYork, City.London, "Airline1", "AA345"),
-                 new Flight(DateTime.Now.AddHours(-5).AddMinutes(33),DateTime.Now.AddHours(-1).AddMinutes(33), "B", City.Paris, City.Berlin, "Airline2","DL678"),
-                 new Flight(DateTime.Now.AddHours(1).AddMinutes(-27),DateTime.Now.AddHours(5).AddMinutes(27), "C", City.Rome, City.Barcelona, "Airline3","UA123"),
-                 new Flight(DateTime.Now.AddHours(-4).AddMinutes(-42),DateTime.Now.AddMinutes(41), "A", City.Amsterdam, City.Berlin, "Airline4","AA345"),
-                 new Flight(DateTime.Now.AddHours(3).AddMinutes(7),DateTime.Now.AddHours(6).AddMinutes(3), "B", City.London, City.Paris, "Airline5","DL678"),
-                 new Flight(DateTime.Now.AddHours(-1).AddMinutes(15),DateTime.Now.AddHours(4).AddMinutes(27), "C", City.Prague, City.Vienna, "Airline6","UA123"),
-                 new Flight(DateTime.Parse("2023-09-14 13:00"), DateTime.Parse("2023-09-14 15:00"), "A", City.Madrid, City.Paris, "Airline7", "AA345"),
-                 new Flight(DateTime.Parse("2023-09-10 16:30"), DateTime.Parse("2023-09-17 18:30"), "B", City.Paris, City.Warsaw, "Airline8","BA456"),
-                 new Flight(DateTime.Parse("2023-09-15 11:15"), DateTime.Parse("2023-09-14 13:15"), "C", City.Vienna, City.Paris, "Airline9","SQ789"),
-                 new Flight(DateTime.Parse("2023-09-14 14:45"), DateTime.Parse("2023-09-19 16:45"), "A", City.Barcelona, City.Paris, "Airline10", "AA345"),
-                 new Flight(DateTime.Parse("2023-09-01 08:30"), DateTime.Parse("2023-09-14 10:30"), "B", City.Lisbon, City.Paris, "Airline11","SQ789"),
-                 new Flight(DateTime.Parse("2023-09-10 09:00"), DateTime.Parse("2023-09-21 11:00"), "C", City.Warsaw, City.Budapest, "Airline12","BA456"),
-                 new Flight(DateTime.Parse("2023-09-22 11:45"), DateTime.Parse("2023-09-22 13:45"), "A", City.Berlin, City.Amsterdam, "Airline13","AA345"),
-                 new Flight(DateTime.Parse("2023-09-10 13:30"), DateTime.Parse("2023-09-23 14:30"), "B", City.Paris, City.London, "Airline14","DL678")
+             {
+                 new Flight(DateTime.Now.AddHours(1).AddMinutes(-19), DateTime.Now.AddHours(1).AddMinutes(19), "A", City.Kyiv, City.London, "SkyWings Airlines", "AA345", "On Time"),
+new Flight(DateTime.Now.AddHours(1).AddMinutes(33), DateTime.Now.AddHours(2).AddMinutes(33), "B", City.Kyiv, City.Berlin, "AeroJet Express", "DL678", "Delayed"),
+new Flight(DateTime.Now.AddHours(2).AddMinutes(-27), DateTime.Now.AddHours(3).AddMinutes(27), "C", City.Kyiv, City.Barcelona, "Horizon Airline", "UA123", "On Time"),
+new Flight(DateTime.Now.AddMinutes(40), DateTime.Now.AddHours(2).AddMinutes(41), "A", City.Kyiv, City.Berlin, "StarStream Airways", "AA345", "On Time"),
+new Flight(DateTime.Now.AddMinutes(15), DateTime.Now.AddHours(1).AddMinutes(27), "C", City.Kyiv, City.Vienna, "OceanAir International", "UA123", "Delayed"),
+
+new Flight(DateTime.Now.AddHours(2).AddMinutes(-19), DateTime.Now.AddHours(3).AddMinutes(19), "A", City.NewYork, City.Kyiv, "Horizon Airline", "AA345", "On Time"),
+new Flight(DateTime.Now.AddMinutes(33), DateTime.Now.AddHours(2).AddMinutes(33), "B", City.Paris, City.Kyiv, "SkyWings Airlines", "DL678", "On Time"),
+new Flight(DateTime.Now.AddHours(1).AddMinutes(-27), DateTime.Now.AddHours(2).AddMinutes(27), "C", City.Rome, City.Kyiv, "AeroJet Express", "UA123", "Delayed"),
+new Flight(DateTime.Now.AddMinutes(40), DateTime.Now.AddHours(1).AddMinutes(41), "A", City.Amsterdam, City.Kyiv, "SkyWings Airlines", "AA345", "On Time"),
+new Flight(DateTime.Now.AddHours(1).AddMinutes(7), DateTime.Now.AddHours(2).AddMinutes(3), "B", City.London, City.Kyiv, "OceanAir International", "DL678", "On Time"),
+new Flight(DateTime.Now.AddHours(1).AddMinutes(15), DateTime.Now.AddHours(2).AddMinutes(27), "C", City.Prague, City.Kyiv, "SkyWings Airlines", "UA123", "On Time"),
+
+new Flight(DateTime.Parse("2023-09-14 13:00"), DateTime.Parse("2023-09-14 15:00"), "A", City.Madrid, City.Kyiv, "AeroJet Express", "AA345", "On Time"),
+new Flight(DateTime.Parse("2023-09-10 16:30"), DateTime.Parse("2023-09-17 18:30"), "B", City.Kyiv, City.Warsaw, "SkyWings Airlines", "BA456", "On Time"),
+new Flight(DateTime.Parse("2023-09-15 11:15"), DateTime.Parse("2023-09-14 13:15"), "C", City.Vienna, City.Kyiv, "OceanAir International", "SQ789", "Delayed"),
+new Flight(DateTime.Parse("2023-09-14 14:45"), DateTime.Parse("2023-09-14 16:45"), "A", City.Kyiv, City.Paris, "SunRise Airlines", "AA345", "On Time"),
+new Flight(DateTime.Parse("2023-09-01 08:30"), DateTime.Parse("2023-09-14 10:30"), "B", City.Lisbon, City.Kyiv, "StarStream Airways", "SQ789", "On Time"),
+new Flight(DateTime.Parse("2023-09-10 09:00"), DateTime.Parse("2023-09-21 11:00"), "C", City.Kyiv, City.Budapest, "SkyWings Airlines", "BA456", "Delayed"),
+new Flight(DateTime.Parse("2023-09-22 11:45"), DateTime.Parse("2023-09-22 13:45"), "A", City.Berlin, City.Kyiv, "Horizon Airline", "AA345", "On Time"),
+new Flight(DateTime.Parse("2023-09-10 13:30"), DateTime.Parse("2023-09-23 14:30"), "B", City.Kyiv, City.London, "AeroJet Express", "DL678", "On Time")
+
              };
             }
 
-            
+
         }
 
     }
