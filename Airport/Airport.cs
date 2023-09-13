@@ -5,9 +5,9 @@ namespace AirportProject
 {
     internal class Airport
     {
-        public string Name { get; set; }
-        public List<Flight> Flights { get; set; }
-        
+        public string Name { get; }
+        public List<Flight> Flights { get; }
+
         public Airport(string name, List<Flight> flights)
         {
             Name = name;
@@ -22,7 +22,10 @@ namespace AirportProject
         public List<Flight> GetFlightsForToday()
         {
             var today = DateTime.Now.Date;
-            var flightsForToday = Flights .Where(flight => flight.DepartureDay == today).OrderBy(flight => flight.DepartureTime).ToList();
+            var flightsForToday = Flights
+               .Where(flight => flight.DepartureDay == today)
+               .OrderBy(flight => flight.DepartureTime)
+               .ToList();
 
             return flightsForToday;
         }
@@ -30,7 +33,10 @@ namespace AirportProject
         //сортування за датою відпраки
         public List<Flight> SearchByDate(DateTime departureDay)
         {
-            var flightsForDate = Flights.Where(flight => flight.DepartureDay == departureDay).OrderBy(flight => flight.DepartureTime).ToList();
+            var flightsForDate = Flights
+               .Where(flight => flight.DepartureDay.Date == departureDay.Date)
+               .OrderBy(flight => flight.DepartureTime)
+               .ToList();
 
             return flightsForDate;
         }
@@ -38,7 +44,10 @@ namespace AirportProject
         //місто прибуття
         public List<Flight> SearchByArrivalCity(City arrivalCity)
         {
-            var flightsByArrivalCity = Flights.Where(flight => flight.ArrivalCity == arrivalCity).OrderBy(flight => flight.DepartureTime).ToList();
+            var flightsByArrivalCity = Flights
+               .Where(flight => flight.ArrivalCity == arrivalCity)
+               .OrderBy(flight => flight.DepartureTime)
+               .ToList();
 
             return flightsByArrivalCity;
         }
@@ -47,7 +56,10 @@ namespace AirportProject
 
         public List<Flight> SearchByArrivalCityAndDate(City arrivalCity, DateTime date)
         {
-            var flightsByArrivalCityAndDate = Flights.Where(flight => flight.ArrivalCity == arrivalCity && flight.DepartureDay == date.Date).OrderBy(flight => flight.DepartureTime).ToList();
+            var flightsByArrivalCityAndDate = Flights
+               .Where(flight => flight.ArrivalCity == arrivalCity && flight.DepartureDay.Date == date.Date)
+               .OrderBy(flight => flight.DepartureTime)
+               .ToList();
 
             return flightsByArrivalCityAndDate;
         }
@@ -55,20 +67,34 @@ namespace AirportProject
         //дата прибуття 
         public List<Flight> SearchByArrivalDate(DateTime arrivalDate)
         {
-            var flightsForDate = Flights.Where(flight => flight.ArrivalDay == arrivalDate.Date).OrderBy(flight => flight.DepartureTime).ToList();
+            var flightsForDate = Flights
+               .Where(flight => flight.ArrivalDay.Date == arrivalDate.Date)
+               .OrderBy(flight => flight.DepartureTime)
+               .ToList();
 
             return flightsForDate;
         }
 
         //дата відправки і час відправки 
-        public List<Flight> SearchByDepartureDateTime(DateTime departureDateTime)
+        public List<Flight> SearchByDepartureDateTime(DateTime departureTime)
         {
-            var departureDateTimeLower = departureDateTime.AddMinutes(-30);
-            var departureDateTimeUpper = departureDateTime.AddMinutes(30);
+            var departureTimeLower = departureTime.AddMinutes(-30);
+            var departureTimeUpper = departureTime.AddMinutes(30);
 
-            var flightsForDateTimeRange = Flights.Where(flight => flight.DepartureTime >= departureDateTimeLower && flight.DepartureTime <= departureDateTimeUpper).OrderBy(flight => flight.DepartureTime).ToList();
+            var flightsForDateTimeRange = Flights
+               .Where(flight => flight.DepartureTime >= departureTimeLower && flight.DepartureTime <= departureTimeUpper)
+               .OrderBy(flight => flight.DepartureTime)
+               .ToList();
 
             return flightsForDateTimeRange;
+        }
+        public List<Flight> SearchByFlightNumber(string flightnumber)
+        {
+            var flightsByNumber=Flights
+                .Where((flight) => flight.FlightNumber == flightnumber)
+                .OrderBy(flight => flight.DepartureTime)
+               .ToList();
+            return flightsByNumber;
         }
     }
 }
