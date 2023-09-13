@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace AirportProject
 {
-    internal class Validation
+    internal static class Validatior
     {
-        public City ValidateCity( string userInput)
+        public static City ValidateCity(string userInput)
         {
             City arrivalCity;
             while (!Enum.IsDefined(typeof(City), userInput))
@@ -21,7 +21,7 @@ namespace AirportProject
             return arrivalCity;
         }
 
-        public  DateTime ValidateDate(string userInput)
+        public static DateTime ValidateDate(string userInput)
         {
             DateTime date;
             while (!DateTime.TryParse(userInput, out date))

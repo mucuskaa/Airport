@@ -24,7 +24,7 @@ namespace AirportProject
         {
             var today = DateTime.Now.Date;
             var arrivingFlightsForToday = Flights
-               .Where(flight => flight.ArrivalDay.Date == today && flight.ArrivalCity == arrivalCity)
+               .Where(flight => flight.Direction == Direction.Arraiving && flight.ArrivalDay.Date == today && flight.ArrivalCity == arrivalCity)
                .OrderBy(flight => flight.ArrivalTime)
                .ToList();
 
@@ -32,10 +32,9 @@ namespace AirportProject
         }
 
         public List<Flight> GetDepartingFlightsForToday(DateTime today)
-        {
-           
+        {         
             var departingFlightsForToday = Flights
-               .Where(flight => flight.DepartureDay.Date == today.Date&&flight.DepartureCity==City.Kyiv)
+               .Where(flight => flight.DepartureDay.Date == today.Date&&flight.DepartureCity == City.Kyiv)
                .OrderBy(flight => flight.DepartureTime)
                .ToList();
 
@@ -58,7 +57,7 @@ namespace AirportProject
         public List<Flight> SearchByFlightNumberAndDate(string flightNumber, DateTime date)
         {
             var flightsByNumberAndDate = Flights
-               .Where(flight => flight.FlightNumber == flightNumber && flight.DepartureDay.Date == date.Date)
+               .Where(flight => (String.Compare(flight.FlightNumber, flightNumber.Trim(), ignoreCase: true) == 0) && flight.DepartureDay.Date == date.Date)
                .OrderBy(flight => flight.DepartureTime)
                .ToList();
 

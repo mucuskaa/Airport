@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace AirportProject
 {
-    internal class DisplayInfo
+    internal static class TableBuilder
     {
         private static void DisplayTable(List<Flight> flights, bool showDepartureCity)
         {
-            if (flights.Count == 0)
+            if (!flights.Any())
             {
                 Console.WriteLine($"I'm sorry, but there are no flights matching your request.\n");
             }
