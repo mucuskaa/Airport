@@ -19,12 +19,11 @@ namespace AirportProject
             Flights.Add(flight);
         }
 
-
         public List<Flight> GetArrivingFlightsForToday(City arrivalCity)
         {
             var today = DateTime.Now.Date;
             var arrivingFlightsForToday = Flights
-               .Where(flight => flight.ArrivalDay.Date == today && flight.ArrivalCity == arrivalCity)
+               .Where(flight => flight.Direction == Direction.Arraiving && flight.ArrivalDay.Date == today && flight.ArrivalCity == arrivalCity)
                .OrderBy(flight => flight.ArrivalTime)
                .ToList();
 
@@ -33,21 +32,21 @@ namespace AirportProject
 
         public List<Flight> GetDepartingFlightsForToday(DateTime today)
         {
-           
+
             var departingFlightsForToday = Flights
-               .Where(flight => flight.DepartureDay.Date == today.Date&&flight.DepartureCity==City.Kyiv)
+               .Where(flight => flight.Direction == Direction.Departing && flight.DepartureDay.Date == today.Date && flight.DepartureCity == City.Kyiv)
                .OrderBy(flight => flight.DepartureTime)
                .ToList();
 
             return departingFlightsForToday;
         }
-        
+
         // дата відправки і місто прибуття
 
         public List<Flight> SearchByArrivalCityAndDate(City arrivalCity, DateTime date)
         {
             var flightsByArrivalCityAndDate = Flights
-               .Where(flight => flight.ArrivalCity == arrivalCity && flight.DepartureDay.Date == date.Date)
+              .Where(flight => flight.Direction == Direction.Departing && flight.ArrivalCity == arrivalCity && flight.DepartureDay.Date == date.Date)
                .OrderBy(flight => flight.DepartureTime)
                .ToList();
 
@@ -58,7 +57,7 @@ namespace AirportProject
         public List<Flight> SearchByFlightNumberAndDate(string flightNumber, DateTime date)
         {
             var flightsByNumberAndDate = Flights
-               .Where(flight => flight.FlightNumber == flightNumber && flight.DepartureDay.Date == date.Date)
+               .Where(flight => (String.Compare(flight.FlightNumber, flightNumber.Trim(), ignoreCase: true) == 0) && flight.DepartureDay.Date == date.Date)
                .OrderBy(flight => flight.DepartureTime)
                .ToList();
 
@@ -69,7 +68,7 @@ namespace AirportProject
         public List<Flight> SearchByDepartureCityAndDate(City departureCity, DateTime date)
         {
             var flightsByDepartureCityAndDate = Flights
-               .Where(flight => flight.DepartureCity == departureCity && flight.DepartureDay.Date == date.Date)
+               .Where(flight => flight.Direction == Direction.Arraiving && flight.DepartureCity == departureCity && flight.DepartureDay.Date == date.Date)
                .OrderBy(flight => flight.DepartureTime)
                .ToList();
 
