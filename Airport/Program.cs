@@ -184,8 +184,8 @@ namespace AirportProject
                 Console.WriteLine("Choose option: ");
                 Console.WriteLine("1-Today’s arrivals");
                 Console.WriteLine("2-Today's departures");
-                Console.WriteLine("3-Search flight by arrival city");
-                Console.WriteLine("4-Search flight by departure city");
+                Console.WriteLine("3-Search in arriving flights");
+                Console.WriteLine("4-Search in departing flights");
                 Console.WriteLine("5-Back to Main Menu");
                 Console.WriteLine("6-Quit program");
             }

@@ -32,16 +32,13 @@ namespace AirportProject
 
         public List<Flight> GetDepartingFlightsForToday(DateTime today)
         {
-
             var departingFlightsForToday = Flights
-               .Where(flight => flight.Direction == Direction.Departing && flight.DepartureDay.Date == today.Date && flight.DepartureCity == City.Kyiv)
+               .Where(flight => flight.Direction == Direction.Departing && flight.DepartureDay.Date == today.Date)
                .OrderBy(flight => flight.DepartureTime)
                .ToList();
 
             return departingFlightsForToday;
         }
-
-        // дата відправки і місто прибуття
 
         public List<Flight> SearchByArrivalCityAndDate(City arrivalCity, DateTime date)
         {
@@ -53,18 +50,16 @@ namespace AirportProject
             return flightsByArrivalCityAndDate;
         }
 
-        //Пошук за номером рейсу і датою вильоту:
         public List<Flight> SearchByFlightNumberAndDate(string flightNumber, DateTime date)
         {
             var flightsByNumberAndDate = Flights
-               .Where(flight => (String.Compare(flight.FlightNumber, flightNumber.Trim(), ignoreCase: true) == 0) && flight.DepartureDay.Date == date.Date)
+               .Where(flight => String.Equals(flight.FlightNumber, flightNumber, StringComparison.OrdinalIgnoreCase) && flight.DepartureDay.Date == date.Date)
                .OrderBy(flight => flight.DepartureTime)
                .ToList();
 
             return flightsByNumberAndDate;
         }
 
-        //Пошук за місцем вильоту і датою вильоту:
         public List<Flight> SearchByDepartureCityAndDate(City departureCity, DateTime date)
         {
             var flightsByDepartureCityAndDate = Flights
